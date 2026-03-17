@@ -27,6 +27,16 @@
       min-height: 100vh;
     }
 
+    /* ── Hero 애니메이션 ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
     /* ── Hero ── */
     .hero {
       background: url('images/hero.png') center center / cover no-repeat;
@@ -47,11 +57,13 @@
       font-weight: 800; color: #fff;
       line-height: 1.3; margin-bottom: 14px;
       white-space: nowrap;
+      animation: fadeUp .7s ease both;
     }
     .hero p {
       font-size: clamp(13px, 1.8vw, 15px);
       color: rgba(255,255,255,.88);
       white-space: nowrap;
+      animation: fadeUp .7s ease .2s both;
     }
     @media (max-width: 600px) {
       .hero h1, .hero p { white-space: normal; }
@@ -60,7 +72,7 @@
     /* ── Cards ── */
     .cards-section {
       max-width: 960px; margin: 0 auto;
-      padding: 40px 20px 64px;
+      padding: 40px 20px 40px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
@@ -112,7 +124,7 @@
     /* ── Notice ── */
     .notice-section {
       max-width: 960px; margin: 0 auto;
-      padding: 0 20px 50px;
+      padding: 0 20px 56px;
     }
     .notice {
       background: var(--surface);
@@ -125,15 +137,6 @@
     .notice-ico { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
     .notice h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
     .notice p  { font-size: 13px; color: var(--sub); line-height: 1.7; }
-
-    /* ── Footer ── */
-    footer {
-      background: var(--navy);
-      color: rgba(255,255,255,.55);
-      text-align: center; padding: 22px 20px;
-      font-size: 12px;
-    }
-    footer strong { color: rgba(255,255,255,.9); }
   </style>
 </head>
 <body>
@@ -149,14 +152,14 @@
   <!-- 3 Service Cards -->
   <section class="cards-section">
 
-    <!-- 혁신드림제안 -->
-    <a href="https://djto-sp.github.io/djto-dreamproposal/" class="card">
-      <div class="card-img-wrap ci-blue">
-        <img src="images/char-proposal.png" alt="혁신드림제안">
+    <!-- 학습동아리 -->
+    <a href="https://djto-sp.github.io/djto-studygroup/" class="card">
+      <div class="card-img-wrap ci-green">
+        <img src="images/char-study.png" alt="학습동아리">
       </div>
       <div class="card-body">
-        <div class="card-sub cs-blue">아이디어 제안</div>
-        <h2>혁신드림제안제도</h2>
+        <div class="card-sub cs-green">조직 현안 관련 과제 발굴</div>
+        <h2>학습동아리</h2>
       </div>
     </a>
 
@@ -166,19 +169,19 @@
         <img src="images/char-mileage.png" alt="변화관리마일리지">
       </div>
       <div class="card-body">
-        <div class="card-sub cs-orange">활동 기록 · 마일리지</div>
+        <div class="card-sub cs-orange">개인 역량 개발 및 능동적 조직문화 형성</div>
         <h2>변화관리마일리지</h2>
       </div>
     </a>
 
-    <!-- 학습동아리 -->
-    <a href="https://djto-sp.github.io/djto-studygroup/" class="card">
-      <div class="card-img-wrap ci-green">
-        <img src="images/char-study.png" alt="학습동아리">
+    <!-- 혁신드림제안 -->
+    <a href="https://djto-sp.github.io/djto-dreamproposal/" class="card">
+      <div class="card-img-wrap ci-blue">
+        <img src="images/char-proposal.png" alt="혁신드림제안">
       </div>
       <div class="card-body">
-        <div class="card-sub cs-green">자료 공유 · 학습 관리</div>
-        <h2>학습동아리</h2>
+        <div class="card-sub cs-blue">현장 중심 아이디어 발굴</div>
+        <h2>혁신드림제안제도</h2>
       </div>
     </a>
 
@@ -190,15 +193,10 @@
       <div class="notice-ico">📌</div>
       <div>
         <h3>이용 안내</h3>
-        <p>모든 서비스는 PC·모바일 브라우저에서 이용 가능합니다. 자료 업로드 및 관리 기능 이용 시 사번 확인이 필요할 수 있습니다.<br>문의 : 전략기획팀 이지민 주임</p>
+        <p>모든 서비스는 PC·모바일 브라우저에서 이용 가능합니다. 자료 업로드 및 관리 기능 이용 시 사번 확인이 필요할 수 있습니다.<br>문의 : 전략기획팀 이지민 주임 📞1148</p>
       </div>
     </div>
   </div>
-
-  <footer>
-    <strong>대전관광공사</strong> · <strong>전략기획팀</strong> · <strong>조직혁신 통합 포털</strong><br>
-    <span style="font-size:11px;margin-top:4px;display:block;">담당 : <strong>이지민 주임</strong> 📞1148</span>
-  </footer>
 
 </body>
 </html>
