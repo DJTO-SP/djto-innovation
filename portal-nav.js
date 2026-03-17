@@ -51,11 +51,9 @@
     }
   `;
 
-  const linksHtml = SERVICES.map(s => {
-    const active = isActive(s.key);
-    const style = active ? `background:${s.color};` : '';
-    return `<a href="${s.url}" class="${active ? 'pn-active' : ''}" style="${style}">${s.label}</a>`;
-  }).join('');
+  const linksHtml = SERVICES.map(s =>
+    `<a href="${s.url}" data-key="${s.key}" data-color="${s.color}" class="${isActive(s.key) ? 'pn-active' : ''}">${s.label}</a>`
+  ).join('');
 
   function inject() {
     // 스타일
@@ -76,6 +74,13 @@
       </div>
     `;
     document.body.insertBefore(nav.firstElementChild, document.body.firstChild);
+
+    // 활성 링크 색상 적용
+    document.querySelectorAll('#djto-innovation-nav .pn-links a').forEach(a => {
+      if (a.classList.contains('pn-active')) {
+        a.style.background = a.dataset.color;
+      }
+    });
 
     // 기존 콘텐츠가 네비 뒤에 가리지 않도록 여백 추가
     const pushed = document.createElement('div');
