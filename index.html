@@ -94,11 +94,47 @@
       .hero h1 { white-space: normal; }
     }
 
+    /* ── Announce ── */
+    .announce-section {
+      width: 100%; max-width: 1000px; margin: 0 auto;
+      padding: clamp(10px, 1.5vh, 18px) 24px 0;
+      flex: 0 0 auto;
+    }
+    .announce-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--navy);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .announce-header {
+      background: var(--navy);
+      padding: 8px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .announce-header span { color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .06em; }
+    .announce-list { list-style: none; }
+    .announce-list li {
+      border-top: 1px solid var(--border);
+    }
+    .announce-list li:first-child { border-top: none; }
+    .announce-list a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 16px;
+      text-decoration: none; color: inherit;
+      transition: background .15s;
+    }
+    .announce-list a:hover { background: #f5f8ff; }
+    .announce-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--navy2); flex-shrink: 0; }
+    .announce-title { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .announce-date  { font-size: 11px; color: var(--sub); flex-shrink: 0; }
+    .announce-empty { padding: 10px 16px; font-size: 13px; color: var(--sub); }
+
     /* ── Cards ── */
     .cards-section {
       flex: 1;
       width: 100%; max-width: 1000px; margin: 0 auto;
-      padding: clamp(14px, 2vh, 28px) 24px clamp(10px, 1.5vh, 20px);
+      padding: clamp(10px, 1.5vh, 18px) 24px clamp(8px, 1vh, 14px);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: 1fr;
@@ -126,7 +162,7 @@
       flex: 1;
       width: 100%;
       display: flex; align-items: center; justify-content: center;
-      padding: clamp(24px, 4vh, 36px) 24px clamp(16px, 2.5vh, 24px);
+      padding: clamp(14px, 2.5vh, 22px) 24px clamp(10px, 1.5vh, 16px);
       min-height: 0;
     }
     .ci-blue   { background: #eff6ff; }
@@ -134,13 +170,13 @@
     .ci-green  { background: #f0fdf4; }
 
     .card-img-wrap img {
-      width: 100%; max-width: 190px;
-      height: 100%; max-height: clamp(120px, 18vh, 200px);
+      width: 100%; max-width: 160px;
+      height: 100%; max-height: clamp(80px, 12vh, 140px);
       object-fit: contain;
     }
 
     .card-body {
-      padding: clamp(12px, 2vh, 18px) 20px clamp(14px, 2.5vh, 24px);
+      padding: clamp(8px, 1.2vh, 12px) 20px clamp(10px, 1.5vh, 16px);
       text-align: center;
       border-top: 1px solid var(--border);
       flex: 0 0 auto;
@@ -182,6 +218,18 @@
       <p>작은 아이디어가 큰 변화를 만듭니다.<br>대전관광공사 구성원 모두가 조직혁신의 주인공입니다.</p>
     </div>
   </section>
+
+  <!-- 알립니다 -->
+  <div class="announce-section">
+    <div class="announce-box">
+      <div class="announce-header">
+        <span>📢 알립니다</span>
+      </div>
+      <ul class="announce-list" id="announce-list">
+        <li><div class="announce-empty">불러오는 중...</div></li>
+      </ul>
+    </div>
+  </div>
 
   <!-- 3 Service Cards -->
   <section class="cards-section">
@@ -232,5 +280,40 @@
     </div>
   </div>
 
+<script>
+const STUDY_SCRIPT = 'https://script.google.com/macros/s/AKfycbz09Zkvveie1252E4ZO9MD6qe7XKYj7npGNmv4R8NwwFJhx0xG59c7d7HcQJxM92AhGiA/exec';
+const NOTICE_URL   = 'https://djto-sp.github.io/djto-studygroup/#notice';
+
+(async () => {
+  const el = document.getElementById('announce-list');
+  try {
+    const r    = await fetch(STUDY_SCRIPT + '?action=getNotices');
+    const list = await r.json();
+    if (!list || !list.length) {
+      el.innerHTML = '<li><div class="announce-empty">등록된 공지사항이 없습니다.</div></li>';
+      return;
+    }
+    const items = list.slice(0, 3);
+    el.innerHTML = items.map(n => `
+      <li>
+        <a href="${NOTICE_URL}" target="_blank">
+          <div class="announce-dot"></div>
+          <div class="announce-title">${esc(n.title)}</div>
+          <div class="announce-date">${fmtD(n.createdAt)}</div>
+        </a>
+      </li>`).join('');
+  } catch(e) {
+    el.innerHTML = '<li><div class="announce-empty">공지를 불러오지 못했습니다.</div></li>';
+  }
+})();
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtD(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return String(iso).substring(0,10);
+  return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+}
+</script>
 </body>
 </html>
