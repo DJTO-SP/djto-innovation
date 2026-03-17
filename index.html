@@ -7,14 +7,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     @font-face {
-      font-family: 'GmarketSans';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
-      font-weight: 700; font-style: normal;
+      font-family: 'Cafe24PROSlimMax';
+      src: url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24PROSlimMax/Cafe24PROSlim-Max.woff2') format('woff2'),
+           url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24PROSlimMax/Cafe24PROSlim-Max.woff') format('woff');
+      font-weight: normal; font-style: normal; font-display: swap;
     }
     @font-face {
-      font-family: 'GmarketSans';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-      font-weight: 500; font-style: normal;
+      font-family: 'Cafe24PROSlimAir';
+      src: url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24PROSlimAir/Cafe24PROSlim-Air.woff2') format('woff2'),
+           url('https://cdn.jsdelivr.net/gh/fonts-archive/Cafe24PROSlimAir/Cafe24PROSlim-Air.woff') format('woff');
+      font-weight: normal; font-style: normal; font-display: swap;
     }
   </style>
   <style>
@@ -36,7 +38,10 @@
       font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ── Hero 애니메이션 ── */
@@ -48,48 +53,60 @@
     /* ── Hero ── */
     .hero {
       background: url('images/hero.png') center center / cover no-repeat;
-      padding: 110px 20px 140px;
+      padding: clamp(22px, 4vh, 52px) 20px;
       text-align: center;
       position: relative;
       overflow: hidden;
+      flex: 0 0 auto;
     }
     .hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: rgba(15, 30, 65, 0.52);
+      background: rgba(15, 30, 65, 0.35);
       pointer-events: none;
     }
     .hero-inner { position: relative; max-width: 900px; margin: 0 auto; }
     .hero h1 {
-      font-family: 'GmarketSans', 'Noto Sans KR', sans-serif;
-      font-size: clamp(26px, 4.5vw, 46px);
-      font-weight: 700; color: #fff;
-      line-height: 1.3; margin-bottom: 18px;
+      font-family: 'Cafe24PROSlimMax', 'Noto Sans KR', sans-serif;
+      font-size: clamp(28px, 5vw, 54px);
+      font-weight: normal;
+      line-height: 1.3; margin-bottom: clamp(10px, 1.5vh, 18px);
       white-space: nowrap;
       animation: fadeUp .7s ease both;
     }
+    /* 대전관광공사: 흰색 */
+    .hero h1 .t-wg {
+      color: #ffffff;
+    }
+    /* 조직혁신 통합 포털: 2023C */
+    .hero h1 .t-2023c {
+      color: #E18C69;
+    }
     .hero p {
-      font-family: 'GmarketSans', 'Noto Sans KR', sans-serif;
-      font-weight: 500;
-      font-size: clamp(14px, 2.2vw, 20px);
-      color: rgba(255,255,255,.88);
-      white-space: nowrap;
+      font-family: 'Cafe24PROSlimAir', 'Noto Sans KR', sans-serif;
+      font-weight: normal;
+      font-size: clamp(15px, 2.2vw, 22px);
+      color: rgba(255,255,255,.90);
+      line-height: 1.55;
       animation: fadeUp .7s ease .25s both;
     }
     @media (max-width: 600px) {
-      .hero h1, .hero p { white-space: normal; }
+      .hero h1 { white-space: normal; }
     }
 
     /* ── Cards ── */
     .cards-section {
-      max-width: 960px; margin: 0 auto;
-      padding: 40px 20px 40px;
+      flex: 1;
+      width: 100%; max-width: 1000px; margin: 0 auto;
+      padding: clamp(14px, 2vh, 28px) 24px clamp(10px, 1.5vh, 20px);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-rows: 1fr;
+      gap: 16px;
+      overflow: hidden;
     }
     @media (max-width: 680px) {
-      .cards-section { grid-template-columns: 1fr; }
+      .cards-section { grid-template-columns: 1fr; overflow-y: auto; }
     }
 
     .card {
@@ -101,31 +118,36 @@
       display: flex; flex-direction: column;
       text-decoration: none; color: inherit;
       transition: transform .2s, box-shadow .2s;
+      min-height: 0;
     }
     .card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(0,0,0,.14); }
 
     .card-img-wrap {
+      flex: 1;
       width: 100%;
       display: flex; align-items: center; justify-content: center;
-      padding: 32px 24px 20px;
+      padding: clamp(24px, 4vh, 36px) 24px clamp(16px, 2.5vh, 24px);
+      min-height: 0;
     }
     .ci-blue   { background: #eff6ff; }
     .ci-orange { background: #fff7ed; }
     .ci-green  { background: #f0fdf4; }
 
     .card-img-wrap img {
-      width: 100%; max-width: 200px;
-      height: 200px; object-fit: contain;
+      width: 100%; max-width: 190px;
+      height: 100%; max-height: clamp(120px, 18vh, 200px);
+      object-fit: contain;
     }
 
     .card-body {
-      padding: 16px 20px 24px;
+      padding: clamp(12px, 2vh, 18px) 20px clamp(14px, 2.5vh, 24px);
       text-align: center;
       border-top: 1px solid var(--border);
+      flex: 0 0 auto;
     }
     .card-sub {
       font-size: 11px; font-weight: 700;
-      letter-spacing: .05em; margin-bottom: 6px;
+      letter-spacing: .05em; margin-bottom: 5px;
     }
     .cs-blue   { color: var(--navy2); }
     .cs-orange { color: var(--orange); }
@@ -134,8 +156,9 @@
 
     /* ── Notice ── */
     .notice-section {
-      max-width: 960px; margin: 0 auto;
-      padding: 0 20px 56px;
+      width: 100%; max-width: 1000px; margin: 0 auto;
+      padding: 0 24px clamp(14px, 2vh, 24px);
+      flex: 0 0 auto;
     }
     .notice {
       background: var(--surface);
@@ -155,8 +178,8 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-inner">
-      <h1>대전관광공사 조직혁신 통합 포털</h1>
-      <p>작은 아이디어가 큰 변화를 만듭니다. 대전관광공사 구성원 모두가 조직혁신의 주인공입니다.</p>
+      <h1><span class="t-wg">대전관광공사</span> <span class="t-2023c">조직혁신 통합 포털</span></h1>
+      <p>작은 아이디어가 큰 변화를 만듭니다.<br>대전관광공사 구성원 모두가 조직혁신의 주인공입니다.</p>
     </div>
   </section>
 
