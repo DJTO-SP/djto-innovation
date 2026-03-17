@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>조직혁신 통합 포털 · 대전관광공사</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.css" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -28,13 +29,17 @@
     }
 
     /* ── Hero 애니메이션 ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+    .cursor {
+      display: inline-block;
+      width: 2px; height: 1em;
+      background: #fff;
+      margin-left: 3px;
+      vertical-align: middle;
+      animation: blink .7s step-end infinite;
     }
 
     /* ── Hero ── */
@@ -53,17 +58,19 @@
     }
     .hero-inner { position: relative; max-width: 900px; margin: 0 auto; }
     .hero h1 {
+      font-family: 'GmarketSans', 'Noto Sans KR', sans-serif;
       font-size: clamp(20px, 3.5vw, 34px);
-      font-weight: 800; color: #fff;
+      font-weight: 700; color: #fff;
       line-height: 1.3; margin-bottom: 14px;
       white-space: nowrap;
-      animation: fadeUp .7s ease both;
+      min-height: 1.3em;
     }
     .hero p {
       font-size: clamp(13px, 1.8vw, 15px);
       color: rgba(255,255,255,.88);
       white-space: nowrap;
-      animation: fadeUp .7s ease .2s both;
+      opacity: 0;
+      transition: opacity .6s ease;
     }
     @media (max-width: 600px) {
       .hero h1, .hero p { white-space: normal; }
@@ -198,5 +205,46 @@
     </div>
   </div>
 
+  <script>
+    const h1 = document.querySelector('.hero h1');
+    const p  = document.querySelector('.hero p');
+    const titleText    = h1.textContent.trim();
+    const subtitleText = p.textContent.trim();
+
+    h1.textContent = '';
+    p.textContent  = '';
+
+    // 커서 요소
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    h1.appendChild(cursor);
+
+    let i = 0;
+    function typeTitle() {
+      if (i < titleText.length) {
+        h1.insertBefore(document.createTextNode(titleText[i]), cursor);
+        i++;
+        setTimeout(typeTitle, 65);
+      } else {
+        // 제목 완료 → 커서 p로 이동, 부제목 타이핑
+        cursor.remove();
+        p.style.opacity = '1';
+        p.appendChild(cursor);
+        let j = 0;
+        function typeSub() {
+          if (j < subtitleText.length) {
+            p.insertBefore(document.createTextNode(subtitleText[j]), cursor);
+            j++;
+            setTimeout(typeSub, 45);
+          } else {
+            // 부제목 완료 → 커서 제거
+            setTimeout(() => cursor.remove(), 800);
+          }
+        }
+        setTimeout(typeSub, 200);
+      }
+    }
+    typeTitle();
+  </script>
 </body>
 </html>

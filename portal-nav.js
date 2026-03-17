@@ -5,9 +5,9 @@
  */
 (function () {
   const SERVICES = [
-    { label: '혁신드림제안', url: 'https://djto-sp.github.io/djto-dreamproposal/', key: 'dreamproposal' },
+    { label: '학습동아리', url: 'https://djto-sp.github.io/djto-studygroup/', key: 'studygroup' },
     { label: '변화관리마일리지', url: 'https://djto-sp.github.io/djto-mileage2026/', key: 'mileage2026' },
-    { label: '학습동아리', url: 'https://djto-sp.github.io/djto-studygroup/', key: 'study-club' },
+    { label: '혁신드림제안', url: 'https://djto-sp.github.io/djto-dreamproposal/', key: 'dreamproposal' },
   ];
 
   const path = window.location.href;
@@ -30,10 +30,6 @@
       display: flex; align-items: center; gap: 8px;
       color: #fff; text-decoration: none; font-size: 13px; font-weight: 700;
       white-space: nowrap; flex-shrink: 0;
-    }
-    #djto-innovation-nav .pn-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #e8610a; flex-shrink: 0;
     }
     #djto-innovation-nav .pn-label { display: inline; }
     #djto-innovation-nav .pn-links {
@@ -71,8 +67,7 @@
       <div id="djto-innovation-nav">
         <div class="pn-wrap">
           <a href="https://djto-sp.github.io/djto-innovation/" class="pn-home">
-            <span class="pn-dot"></span>
-            <span class="pn-label">대전관광공사 조직혁신 포털</span>
+            <span class="pn-label">대전관광공사 조직혁신 통합 포털</span>
           </a>
           <div class="pn-links">${linksHtml}</div>
         </div>
