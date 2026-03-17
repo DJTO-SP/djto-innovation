@@ -5,9 +5,9 @@
  */
 (function () {
   const SERVICES = [
-    { label: '학습동아리', url: 'https://djto-sp.github.io/djto-studygroup/', key: 'studygroup' },
-    { label: '변화관리마일리지', url: 'https://djto-sp.github.io/djto-mileage2026/', key: 'mileage2026' },
-    { label: '혁신드림제안', url: 'https://djto-sp.github.io/djto-dreamproposal/', key: 'dreamproposal' },
+    { label: '학습동아리',    url: 'https://djto-sp.github.io/djto-studygroup/',   key: 'studygroup',   color: '#16a34a' },
+    { label: '변화관리마일리지', url: 'https://djto-sp.github.io/djto-mileage2026/',  key: 'mileage2026',  color: '#e8610a' },
+    { label: '혁신드림제안',  url: 'https://djto-sp.github.io/djto-dreamproposal/', key: 'dreamproposal', color: '#2d5499' },
   ];
 
   const path = window.location.href;
@@ -43,7 +43,7 @@
     }
     #djto-innovation-nav .pn-links a:hover { color: #fff; background: rgba(255,255,255,0.12); }
     #djto-innovation-nav .pn-links a.pn-active {
-      color: #fff; background: #e8610a; font-weight: 700;
+      color: #fff; font-weight: 700;
     }
     @media (max-width: 520px) {
       #djto-innovation-nav .pn-label { display: none; }
@@ -51,9 +51,11 @@
     }
   `;
 
-  const linksHtml = SERVICES.map(s =>
-    `<a href="${s.url}" class="${isActive(s.key) ? 'pn-active' : ''}">${s.label}</a>`
-  ).join('');
+  const linksHtml = SERVICES.map(s => {
+    const active = isActive(s.key);
+    const style = active ? `background:${s.color};` : '';
+    return `<a href="${s.url}" class="${active ? 'pn-active' : ''}" style="${style}">${s.label}</a>`;
+  }).join('');
 
   function inject() {
     // 스타일
