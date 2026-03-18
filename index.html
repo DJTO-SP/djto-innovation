@@ -356,7 +356,6 @@
 
 <script>
 const STUDY_SCRIPT = 'https://script.google.com/macros/s/AKfycbz09Zkvveie1252E4ZO9MD6qe7XKYj7npGNmv4R8NwwFJhx0xG59c7d7HcQJxM92AhGiA/exec';
-const NOTICE_URL   = 'https://djto-sp.github.io/djto-studygroup/#notice';
 
 let annData = [];
 let annAdminPw = '';
@@ -364,7 +363,7 @@ let annFileObj = null;
 
 (async () => {
   try {
-    const r = await fetch(STUDY_SCRIPT + '?action=getNotices');
+    const r = await fetch(STUDY_SCRIPT + '?action=getPortalNotices');
     annData = await r.json() || [];
   } catch(e) { annData = []; }
   renderAnnList();
@@ -381,10 +380,10 @@ function renderAnnList() {
     <li>
       <div class="ann-item-inner">
         <div class="announce-dot"></div>
-        <a class="ann-item-link" href="${NOTICE_URL}" target="_blank">
+        <div class="ann-item-link">
           <div class="announce-title">${esc(n.title)}</div>
           <div class="announce-date">${fmtD(n.createdAt)}</div>
-        </a>
+        </div>
         ${n.driveUrl ? `<a class="ann-icon-btn" href="${n.driveUrl}" target="_blank" title="첨부파일 열기" style="text-decoration:none">📎</a>` : ''}
         ${isAdmin ? `<button class="ann-icon-btn" onclick="annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
       </div>
@@ -452,14 +451,14 @@ async function saveAnnNotice() {
       fileName = annFileObj.name;
       fileType = annFileObj.type;
     }
-    const body = { action: 'saveNotice', pw: annAdminPw, title, content };
+    const body = { action: 'savePortalNotice', pw: annAdminPw, title, content };
     if (fileData) Object.assign(body, { fileData, fileName, fileType });
     const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify(body) });
     const res = await r.json();
     if (res.ok) {
       annToast('등록되었습니다!', true);
       closeAnnModal();
-      const r2 = await fetch(STUDY_SCRIPT + '?action=getNotices');
+      const r2 = await fetch(STUDY_SCRIPT + '?action=getPortalNotices');
       annData = await r2.json() || [];
       renderAnnList();
     } else annToast(res.error || '오류가 발생했습니다.');
@@ -469,11 +468,11 @@ async function saveAnnNotice() {
 async function annDeleteNotice(id) {
   if (!confirm('이 공지사항을 삭제하시겠습니까?')) return;
   try {
-    const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify({ action: 'deleteNotice', pw: annAdminPw, id }) });
+    const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify({ action: 'deletePortalNotice', pw: annAdminPw, id }) });
     const res = await r.json();
     if (res.ok) {
       annToast('삭제되었습니다.', true);
-      const r2 = await fetch(STUDY_SCRIPT + '?action=getNotices');
+      const r2 = await fetch(STUDY_SCRIPT + '?action=getPortalNotices');
       annData = await r2.json() || [];
       renderAnnList();
     } else annToast(res.error || '오류');
