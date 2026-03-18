@@ -114,13 +114,14 @@
     }
     .announce-header span { color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .06em; }
     .announce-list { list-style: none; }
+    .announce-list { min-height: 100px; }
     .announce-list li {
       border-top: 1px solid var(--border);
     }
     .announce-list li:first-child { border-top: none; }
     .announce-list a {
       display: flex; align-items: center; gap: 10px;
-      padding: 9px 16px;
+      padding: 14px 16px;
       text-decoration: none; color: inherit;
       transition: background .15s;
     }
@@ -162,7 +163,7 @@
       flex: 1;
       width: 100%;
       display: flex; align-items: center; justify-content: center;
-      padding: clamp(10px, 1.75vh, 15px) 24px clamp(7px, 1.05vh, 11px);
+      padding: clamp(8px, 1.2vh, 14px) 24px clamp(6px, 0.9vh, 10px);
       min-height: 0;
     }
     .ci-blue   { background: #eff6ff; }
@@ -170,13 +171,13 @@
     .ci-green  { background: #f0fdf4; }
 
     .card-img-wrap img {
-      width: 100%; max-width: 130px;
-      height: 100%; max-height: clamp(56px, 8.4vh, 98px);
+      width: 100%; max-width: 150px;
+      height: 100%; max-height: clamp(80px, 11vh, 130px);
       object-fit: contain;
     }
 
     .card-body {
-      padding: clamp(6px, 0.84vh, 9px) 20px clamp(7px, 1.05vh, 11px);
+      padding: clamp(5px, 0.7vh, 8px) 20px clamp(7px, 1vh, 10px);
       text-align: center;
       border-top: 1px solid var(--border);
       flex: 0 0 auto;
