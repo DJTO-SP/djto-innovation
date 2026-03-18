@@ -162,7 +162,7 @@
       flex: 1;
       width: 100%;
       display: flex; align-items: center; justify-content: center;
-      padding: clamp(14px, 2.5vh, 22px) 24px clamp(10px, 1.5vh, 16px);
+      padding: clamp(10px, 1.75vh, 15px) 24px clamp(7px, 1.05vh, 11px);
       min-height: 0;
     }
     .ci-blue   { background: #eff6ff; }
@@ -170,13 +170,13 @@
     .ci-green  { background: #f0fdf4; }
 
     .card-img-wrap img {
-      width: 100%; max-width: 160px;
-      height: 100%; max-height: clamp(80px, 12vh, 140px);
+      width: 100%; max-width: 130px;
+      height: 100%; max-height: clamp(56px, 8.4vh, 98px);
       object-fit: contain;
     }
 
     .card-body {
-      padding: clamp(8px, 1.2vh, 12px) 20px clamp(10px, 1.5vh, 16px);
+      padding: clamp(6px, 0.84vh, 9px) 20px clamp(7px, 1.05vh, 11px);
       text-align: center;
       border-top: 1px solid var(--border);
       flex: 0 0 auto;
@@ -207,6 +207,39 @@
     .notice-ico { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
     .notice h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
     .notice p  { font-size: 13px; color: var(--sub); line-height: 1.7; }
+
+    /* ── Announce Admin ── */
+    .announce-header { display: flex; align-items: center; }
+    .ann-admin-btn { background: transparent; border: none; cursor: pointer; color: rgba(255,255,255,.55); font-size: 13px; padding: 2px 6px; border-radius: 4px; margin-left: auto; transition: color .15s; line-height: 1; }
+    .ann-admin-btn:hover { color: #fff; }
+    .ann-auth-row { padding: 9px 14px; border-top: 1px solid var(--border); display: none; gap: 7px; align-items: center; background: #f8fafc; }
+    .ann-auth-row input { flex: 1; border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 11px; font-size: 13px; font-family: inherit; outline: none; min-width: 0; }
+    .ann-auth-row input:focus { border-color: var(--navy); }
+    .ann-auth-btn { border: none; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 700; font-family: inherit; padding: 7px 13px; white-space: nowrap; }
+    .ann-admin-bar { padding: 8px 14px; border-top: 1px solid var(--border); background: #eef1f8; display: none; align-items: center; justify-content: space-between; gap: 8px; }
+    .ann-admin-bar span { font-size: 12px; font-weight: 700; color: var(--navy); }
+    .ann-add-btn { background: var(--navy); color: #fff; border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .ann-add-btn:hover { filter: brightness(1.1); }
+    .ann-item-inner { display: flex; align-items: center; gap: 10px; padding: 9px 16px; }
+    .ann-item-link { flex: 1; text-decoration: none; display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .ann-icon-btn { background: transparent; border: none; cursor: pointer; padding: 3px 5px; font-size: 13px; border-radius: 4px; flex-shrink: 0; transition: background .15s; }
+    .ann-icon-btn:hover { background: rgba(0,0,0,.08); }
+    /* Notice input modal */
+    .ann-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9998; display: none; align-items: center; justify-content: center; }
+    .ann-modal-overlay.show { display: flex; }
+    .ann-modal { background: #fff; border-radius: 16px; padding: 26px 22px; width: 90%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    .ann-modal h3 { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 14px; }
+    .ann-fg { margin-bottom: 12px; }
+    .ann-fg label { display: block; font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+    .ann-fg input, .ann-fg textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 11px; font-size: 13px; font-family: inherit; outline: none; resize: vertical; box-sizing: border-box; }
+    .ann-fg input:focus, .ann-fg textarea:focus { border-color: var(--navy); }
+    .ann-fg textarea { height: 72px; min-height: 72px; }
+    .ann-file-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; font-size: 12px; color: var(--sub); transition: all .2s; }
+    .ann-file-zone:hover { border-color: var(--navy); background: #f0f3f8; }
+    .ann-file-picked { font-size: 12px; font-weight: 600; color: var(--navy2); margin-top: 4px; display: none; }
+    .ann-mf { display: flex; gap: 8px; margin-top: 4px; }
+    .ann-mf button { flex: 1; padding: 9px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; font-family: inherit; }
+    #ann-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); color: #fff; font-size: 13px; font-weight: 700; padding: 10px 22px; border-radius: 24px; opacity: 0; transition: all .3s; z-index: 99999; pointer-events: none; white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -224,12 +257,52 @@
     <div class="announce-box">
       <div class="announce-header">
         <span>📢 알립니다</span>
+        <button class="ann-admin-btn" onclick="toggleAnnAdmin()" title="관리자">🔐</button>
       </div>
       <ul class="announce-list" id="announce-list">
         <li><div class="announce-empty">불러오는 중...</div></li>
       </ul>
+      <!-- 관리자 인증 줄 -->
+      <div class="ann-auth-row" id="ann-auth-row">
+        <input type="password" id="ann-pw" placeholder="관리자 비밀번호" onkeydown="if(event.key==='Enter')annLogin()">
+        <button class="ann-auth-btn" onclick="annLogin()" style="background:var(--navy);color:#fff;">확인</button>
+        <button class="ann-auth-btn" onclick="toggleAnnAdmin()" style="background:#e2e8f0;color:#64748b;">취소</button>
+      </div>
+      <!-- 관리자 도구 바 -->
+      <div class="ann-admin-bar" id="ann-admin-bar">
+        <span>👑 관리자 모드</span>
+        <button class="ann-add-btn" onclick="openAnnModal()">+ 공지 등록</button>
+      </div>
     </div>
   </div>
+
+  <!-- 공지 등록 모달 -->
+  <div class="ann-modal-overlay" id="ann-modal">
+    <div class="ann-modal">
+      <h3>📢 공지사항 등록</h3>
+      <div class="ann-fg">
+        <label>제목 *</label>
+        <input type="text" id="ann-title" placeholder="공지 제목을 입력하세요">
+      </div>
+      <div class="ann-fg">
+        <label>내용 *</label>
+        <textarea id="ann-content" placeholder="공지 내용을 입력하세요" style="height:72px;min-height:72px;"></textarea>
+      </div>
+      <div class="ann-fg">
+        <label>첨부파일 (선택)</label>
+        <div class="ann-file-zone" onclick="document.getElementById('ann-file').click()">
+          📎 클릭하여 파일 선택
+          <div class="ann-file-picked" id="ann-file-picked"></div>
+        </div>
+        <input type="file" id="ann-file" style="display:none" onchange="annPickFile(this)">
+      </div>
+      <div class="ann-mf">
+        <button onclick="closeAnnModal()" style="background:#e2e8f0;color:#64748b;">취소</button>
+        <button onclick="saveAnnNotice()" style="background:var(--navy);color:#fff;">등록</button>
+      </div>
+    </div>
+  </div>
+  <div id="ann-toast"></div>
 
   <!-- 3 Service Cards -->
   <section class="cards-section">
@@ -284,28 +357,144 @@
 const STUDY_SCRIPT = 'https://script.google.com/macros/s/AKfycbz09Zkvveie1252E4ZO9MD6qe7XKYj7npGNmv4R8NwwFJhx0xG59c7d7HcQJxM92AhGiA/exec';
 const NOTICE_URL   = 'https://djto-sp.github.io/djto-studygroup/#notice';
 
+let annData = [];
+let annAdminPw = '';
+let annFileObj = null;
+
 (async () => {
-  const el = document.getElementById('announce-list');
   try {
-    const r    = await fetch(STUDY_SCRIPT + '?action=getNotices');
-    const list = await r.json();
-    if (!list || !list.length) {
-      el.innerHTML = '<li><div class="announce-empty">등록된 공지사항이 없습니다.</div></li>';
-      return;
-    }
-    const items = list.slice(0, 3);
-    el.innerHTML = items.map(n => `
-      <li>
-        <a href="${NOTICE_URL}" target="_blank">
-          <div class="announce-dot"></div>
+    const r = await fetch(STUDY_SCRIPT + '?action=getNotices');
+    annData = await r.json() || [];
+  } catch(e) { annData = []; }
+  renderAnnList();
+})();
+
+function renderAnnList() {
+  const el = document.getElementById('announce-list');
+  const isAdmin = !!annAdminPw;
+  if (!annData.length) {
+    el.innerHTML = '<li><div class="announce-empty">등록된 공지사항이 없습니다.</div></li>';
+    return;
+  }
+  el.innerHTML = annData.slice(0, 3).map(n => `
+    <li>
+      <div class="ann-item-inner">
+        <div class="announce-dot"></div>
+        <a class="ann-item-link" href="${NOTICE_URL}" target="_blank">
           <div class="announce-title">${esc(n.title)}</div>
           <div class="announce-date">${fmtD(n.createdAt)}</div>
         </a>
-      </li>`).join('');
-  } catch(e) {
-    el.innerHTML = '<li><div class="announce-empty">공지를 불러오지 못했습니다.</div></li>';
+        ${isAdmin ? `<button class="ann-icon-btn" onclick="annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
+      </div>
+    </li>`).join('');
+}
+
+function toggleAnnAdmin() {
+  const authRow = document.getElementById('ann-auth-row');
+  const adminBar = document.getElementById('ann-admin-bar');
+  if (annAdminPw) {
+    annAdminPw = '';
+    authRow.style.display = 'none';
+    adminBar.style.display = 'none';
+    renderAnnList();
+  } else {
+    authRow.style.display = authRow.style.display === 'flex' ? 'none' : 'flex';
   }
-})();
+}
+
+async function annLogin() {
+  const pw = document.getElementById('ann-pw').value.trim();
+  if (!pw) return;
+  try {
+    const r = await fetch(STUDY_SCRIPT + '?action=getApplications&pw=' + encodeURIComponent(pw) + '&status=');
+    const data = await r.json();
+    if (!data.error) {
+      annAdminPw = pw;
+      document.getElementById('ann-auth-row').style.display = 'none';
+      document.getElementById('ann-admin-bar').style.display = 'flex';
+      renderAnnList();
+    } else {
+      annToast('비밀번호가 올바르지 않습니다.');
+    }
+  } catch(e) { annToast('오류가 발생했습니다.'); }
+}
+
+function openAnnModal() {
+  document.getElementById('ann-title').value = '';
+  document.getElementById('ann-content').value = '';
+  document.getElementById('ann-file').value = '';
+  annFileObj = null;
+  const picked = document.getElementById('ann-file-picked');
+  picked.style.display = 'none';
+  document.getElementById('ann-modal').classList.add('show');
+}
+function closeAnnModal() { document.getElementById('ann-modal').classList.remove('show'); }
+
+function annPickFile(input) {
+  if (input.files[0]) {
+    annFileObj = input.files[0];
+    const el = document.getElementById('ann-file-picked');
+    el.textContent = '📎 ' + annFileObj.name;
+    el.style.display = 'block';
+  }
+}
+
+async function saveAnnNotice() {
+  const title = document.getElementById('ann-title').value.trim();
+  const content = document.getElementById('ann-content').value.trim();
+  if (!title || !content) { annToast('제목과 내용을 입력해주세요.'); return; }
+  try {
+    let fileData='', fileName='', fileType='';
+    if (annFileObj) {
+      fileData = await annToB64(annFileObj);
+      fileName = annFileObj.name;
+      fileType = annFileObj.type;
+    }
+    const body = { action: 'saveNotice', pw: annAdminPw, title, content };
+    if (fileData) Object.assign(body, { fileData, fileName, fileType });
+    const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify(body) });
+    const res = await r.json();
+    if (res.ok) {
+      annToast('등록되었습니다!', true);
+      closeAnnModal();
+      const r2 = await fetch(STUDY_SCRIPT + '?action=getNotices');
+      annData = await r2.json() || [];
+      renderAnnList();
+    } else annToast(res.error || '오류가 발생했습니다.');
+  } catch(e) { annToast('오류가 발생했습니다.'); }
+}
+
+async function annDeleteNotice(id) {
+  if (!confirm('이 공지사항을 삭제하시겠습니까?')) return;
+  try {
+    const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify({ action: 'deleteNotice', pw: annAdminPw, id }) });
+    const res = await r.json();
+    if (res.ok) {
+      annToast('삭제되었습니다.', true);
+      const r2 = await fetch(STUDY_SCRIPT + '?action=getNotices');
+      annData = await r2.json() || [];
+      renderAnnList();
+    } else annToast(res.error || '오류');
+  } catch(e) { annToast('오류가 발생했습니다.'); }
+}
+
+function annToast(msg, ok=false) {
+  const el = document.getElementById('ann-toast');
+  el.textContent = msg;
+  el.style.background = ok ? '#16a34a' : '#e8610a';
+  el.style.opacity = '1';
+  el.style.transform = 'translateX(-50%) translateY(0)';
+  setTimeout(() => { el.style.opacity='0'; el.style.transform='translateX(-50%) translateY(80px)'; }, 2500);
+}
+
+function annToB64(file) {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = e => res(e.target.result.split(',')[1]);
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
+}
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function fmtD(iso) {
