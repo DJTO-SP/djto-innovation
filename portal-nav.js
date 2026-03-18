@@ -67,7 +67,7 @@
       <div id="djto-innovation-nav">
         <div class="pn-wrap">
           <a href="https://djto-sp.github.io/djto-innovation/" class="pn-home">
-            <span class="pn-label">대전관광공사 조직혁신 통합 포털</span>
+            <span class="pn-label">대전관광공사 <span style="color:#FAC766">조직혁신 통합 포털</span></span>
           </a>
           <div class="pn-links">${linksHtml}</div>
         </div>
