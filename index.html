@@ -229,6 +229,15 @@
     .ann-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9998; display: none; align-items: center; justify-content: center; }
     .ann-modal-overlay.show { display: flex; }
     .ann-modal { background: #fff; border-radius: 16px; padding: 26px 22px; width: 90%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    /* Notice detail modal */
+    .ann-detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9997; display: none; align-items: center; justify-content: center; }
+    .ann-detail-overlay.show { display: flex; }
+    .ann-detail { background: #fff; border-radius: 16px; padding: 28px 24px; width: 90%; max-width: 540px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    .ann-detail-title { font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 6px; line-height: 1.4; }
+    .ann-detail-date { font-size: 12px; color: var(--sub); margin-bottom: 16px; }
+    .ann-detail-content { font-size: 14px; color: var(--text); line-height: 1.8; white-space: pre-wrap; border-top: 1px solid var(--border); padding-top: 16px; }
+    .ann-detail-file { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .ann-detail-close { width: 100%; margin-top: 18px; padding: 10px; border: none; border-radius: 10px; background: var(--navy); color: #fff; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
     .ann-modal h3 { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 14px; }
     .ann-fg { margin-bottom: 12px; }
     .ann-fg label { display: block; font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
@@ -304,6 +313,17 @@
     </div>
   </div>
   <div id="ann-toast"></div>
+
+  <!-- Notice Detail Modal -->
+  <div class="ann-detail-overlay" id="ann-detail-overlay" onclick="if(event.target===this)closeAnnDetail()">
+    <div class="ann-detail">
+      <div class="ann-detail-title" id="ann-detail-title"></div>
+      <div class="ann-detail-date" id="ann-detail-date"></div>
+      <div class="ann-detail-content" id="ann-detail-content"></div>
+      <div class="ann-detail-file" id="ann-detail-file" style="display:none"></div>
+      <button class="ann-detail-close" onclick="closeAnnDetail()">닫기</button>
+    </div>
+  </div>
 
   <!-- 3 Service Cards -->
   <section class="cards-section">
@@ -386,11 +406,11 @@ function renderAnnList() {
     el.innerHTML = '<li><div class="announce-empty">등록된 공지사항이 없습니다.</div></li>';
     return;
   }
-  el.innerHTML = annData.slice(0, 3).map(n => `
+  el.innerHTML = annData.slice(0, 3).map((n, i) => `
     <li>
       <div class="ann-item-inner">
         <div class="announce-dot"></div>
-        <div class="ann-item-link">
+        <div class="ann-item-link" onclick="openAnnDetail(${i})" style="cursor:pointer;flex:1;display:flex;align-items:center;gap:10px;min-width:0;">
           <div class="announce-title">${esc(n.title)}</div>
           <div class="announce-date">${fmtD(n.createdAt)}</div>
         </div>
@@ -398,6 +418,24 @@ function renderAnnList() {
         ${isAdmin ? `<button class="ann-icon-btn" onclick="annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
       </div>
     </li>`).join('');
+}
+
+function openAnnDetail(i) {
+  const n = annData.slice(0, 3)[i];
+  if (!n) return;
+  document.getElementById('ann-detail-title').textContent = n.title;
+  document.getElementById('ann-detail-date').textContent = fmtD(n.createdAt);
+  document.getElementById('ann-detail-content').textContent = n.content || '';
+  const fileEl = document.getElementById('ann-detail-file');
+  if (n.driveUrl) {
+    fileEl.style.display = 'block';
+    fileEl.innerHTML = `<a href="${n.driveUrl}" target="_blank" style="font-size:13px;color:var(--navy2);font-weight:700;text-decoration:none;">📎 ${esc(n.fileName || '첨부파일 열기')}</a>`;
+  } else { fileEl.style.display = 'none'; }
+  document.getElementById('ann-detail-overlay').classList.add('show');
+}
+
+function closeAnnDetail() {
+  document.getElementById('ann-detail-overlay').classList.remove('show');
 }
 
 function toggleAnnAdmin() {
