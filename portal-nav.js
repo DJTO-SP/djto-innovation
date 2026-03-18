@@ -82,10 +82,8 @@
       }
     });
 
-    // 기존 콘텐츠가 네비 뒤에 가리지 않도록 여백 추가
-    const pushed = document.createElement('div');
-    pushed.style.height = '46px';
-    document.body.insertBefore(pushed, document.getElementById('djto-innovation-nav').nextSibling);
+    // 기존 콘텐츠가 네비 뒤에 가리지 않도록 body 상단 패딩 추가
+    document.body.style.paddingTop = '46px';
   }
 
   if (document.readyState === 'loading') {
