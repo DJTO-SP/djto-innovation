@@ -97,14 +97,14 @@
     /* ── Announce (인라인 목록형) ── */
     .announce-section {
       width: 100%; max-width: 1000px; margin: 0 auto;
-      padding: clamp(10px, 1.5vh, 18px) 24px 0;
+      padding: clamp(6px, 1vh, 12px) 24px 0;
       flex: 0 0 auto;
     }
     .announce-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .announce-section-title { font-size: 15px; font-weight: 900; color: var(--navy); white-space: nowrap; letter-spacing: -.3px; }
     .announce-section-line { flex: 1; height: 2px; background: var(--navy); }
-    .announce-grid { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; min-height: 44px; }
-    .ann-card { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--border); transition: background .12s; cursor: pointer; }
+    .announce-grid { background: rgba(255,255,255,0.5); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; min-height: 44px; }
+    .ann-card { display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-bottom: 1px solid var(--border); transition: background .12s; cursor: pointer; }
     .ann-card:last-child { border-bottom: none; }
     .ann-card:hover { background: #f5f8ff; }
     .ann-card-0 .ann-badge { background: #eff6ff; color: #1d4ed8; }
@@ -189,16 +189,16 @@
     /* ── Notice ── */
     .notice-section {
       width: 100%; max-width: 1000px; margin: 0 auto;
-      padding: 0 24px clamp(14px, 2vh, 24px);
+      padding: 0 24px clamp(8px, 1vh, 14px);
       flex: 0 0 auto;
     }
     .notice-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .notice-section-title { font-size: 15px; font-weight: 900; color: var(--navy); white-space: nowrap; letter-spacing: -.3px; }
     .notice-section-line { flex: 1; height: 2px; background: var(--navy); }
-    .notice-grid { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
-    .notice-row { display: flex; align-items: center; gap: 10px; padding: 6px 16px; }
-    .notice-row:first-child { padding-top: 11px; }
-    .notice-row:last-child { padding-bottom: 11px; }
+    .notice-grid { background: rgba(255,255,255,0.5); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .notice-row { display: flex; align-items: center; gap: 10px; padding: 4px 16px; }
+    .notice-row:first-child { padding-top: 7px; }
+    .notice-row:last-child { padding-bottom: 7px; }
     .notice-badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 5px; flex-shrink: 0; white-space: nowrap; background: #eef1f8; color: var(--navy); }
     .notice-text { font-size: 13px; color: var(--sub); flex: 1; line-height: 1.5; }
     .notice-text strong { color: var(--navy); font-weight: 700; }
@@ -370,8 +370,7 @@
         <span class="notice-text">모든 서비스는 <strong>PC 브라우저 사용을 권장합니다.</strong> 자료 업로드 및 관리 기능 이용 시 사번 확인이 필요할 수 있습니다.</span>
       </div>
       <div class="notice-row">
-        <span class="notice-badge">문의</span>
-        <span class="notice-text">전략기획팀 이지민 주임 📞1148</span>
+        <span class="notice-text">문의 : 전략기획팀 이지민 주임 📞1148</span>
       </div>
     </div>
   </div>
