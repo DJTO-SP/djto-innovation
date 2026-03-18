@@ -94,86 +94,97 @@
       .hero h1 { white-space: normal; }
     }
 
-    /* ── Announce (Design C) ── */
+    /* ── Announce (인라인 목록형) ── */
     .announce-section {
       width: 100%; max-width: 1000px; margin: 0 auto;
       padding: clamp(10px, 1.5vh, 18px) 24px 0;
       flex: 0 0 auto;
     }
-    .announce-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .announce-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .announce-section-title { font-size: 15px; font-weight: 900; color: var(--navy); white-space: nowrap; letter-spacing: -.3px; }
     .announce-section-line { flex: 1; height: 2px; background: var(--navy); }
-    .announce-grid { display: flex; flex-direction: column; gap: 8px; min-height: 100px; }
-    .ann-card { background: #fff; border-radius: 12px; padding: 13px 18px; box-shadow: 0 2px 10px rgba(0,0,0,.06); border-left: 4px solid; transition: transform .15s, box-shadow .15s; }
-    .ann-card:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,.10); }
-    .ann-card-0 { border-color: #3b82f6; }
-    .ann-card-1 { border-color: #A5CD39; }
-    .ann-card-2 { border-color: #f59e0b; }
-    .ann-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
-    .ann-card-title { font-size: 14px; font-weight: 700; color: var(--text); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; flex: 1; min-width: 0; cursor: pointer; }
-    .ann-card-date { font-size: 11px; color: var(--sub); flex-shrink: 0; margin-left: 10px; }
-    .ann-card-preview { font-size: 12px; color: var(--sub); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .announce-empty { font-size: 13px; color: var(--sub); padding: 10px 0; }
+    .announce-grid { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; min-height: 44px; }
+    .ann-card { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--border); transition: background .12s; cursor: pointer; }
+    .ann-card:last-child { border-bottom: none; }
+    .ann-card:hover { background: #f5f8ff; }
+    .ann-card-0 .ann-badge { background: #eff6ff; color: #1d4ed8; }
+    .ann-card-1 .ann-badge { background: #f0fdf4; color: #15803d; }
+    .ann-card-2 .ann-badge { background: #fffbeb; color: #b45309; }
+    .ann-badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 5px; flex-shrink: 0; white-space: nowrap; }
+    .ann-card-title { font-size: 13px; font-weight: 600; color: var(--text); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; flex: 1; min-width: 0; }
+    .ann-card-date { font-size: 11px; color: var(--sub); flex-shrink: 0; margin-left: 6px; }
+    .ann-card-preview { display: none; }
+    .announce-empty { font-size: 13px; color: var(--sub); padding: 12px 16px; }
 
-    /* ── Cards ── */
+    /* ── Cards (세로형) ── */
     .cards-section {
       flex: 1;
       width: 100%; max-width: 1000px; margin: 0 auto;
       padding: clamp(10px, 1.5vh, 18px) 24px clamp(8px, 1vh, 14px);
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 1fr;
-      gap: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
       overflow: hidden;
-    }
-    @media (max-width: 680px) {
-      .cards-section { grid-template-columns: 1fr; overflow-y: auto; }
     }
 
     .card {
-      background: var(--surface);
-      border-radius: 20px;
+      border-radius: 18px;
       border: 1px solid var(--border);
-      box-shadow: 0 4px 20px rgba(0,0,0,.08);
-      overflow: hidden;
-      display: flex; flex-direction: column;
-      text-decoration: none; color: inherit;
-      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 3px 14px rgba(0,0,0,.07);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .18s, box-shadow .18s, border-color .18s;
+      flex: 1;
       min-height: 0;
+      overflow: hidden;
     }
-    .card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(0,0,0,.14); }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,.13); border-color: #b8c8e8; }
 
     .card-img-wrap {
-      flex: 1;
-      width: 100%;
+      width: clamp(90px, 14vw, 140px);
+      height: 100%;
+      flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      padding: clamp(8px, 1.2vh, 14px) 24px clamp(6px, 0.9vh, 10px);
-      min-height: 0;
+      padding: 16px 12px;
     }
     .ci-blue   { background: #eff6ff; }
     .ci-orange { background: #fff7ed; }
     .ci-green  { background: #f0fdf4; }
 
     .card-img-wrap img {
-      width: 100%; max-width: 300px;
-      height: 100%; max-height: clamp(160px, 22vh, 260px);
+      width: 100%;
+      height: 100%;
+      max-height: clamp(60px, 10vh, 100px);
       object-fit: contain;
     }
 
     .card-body {
-      padding: clamp(5px, 0.7vh, 8px) 20px clamp(7px, 1vh, 10px);
-      text-align: center;
-      border-top: 1px solid var(--border);
-      flex: 0 0 auto;
+      flex: 1;
+      padding: 20px 20px;
+      text-align: left;
     }
+    .ci-blue  + .card-body { border-left: 1px solid #bfdbfe; }
+    .ci-orange + .card-body { border-left: 1px solid #fed7aa; }
+    .ci-green  + .card-body { border-left: 1px solid #bbf7d0; }
     .card-sub {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: .05em; margin-bottom: 5px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .03em; margin-bottom: 6px;
     }
     .cs-blue   { color: var(--navy2); }
     .cs-orange { color: var(--orange); }
     .cs-green  { color: var(--green); }
-    .card h2 { font-size: 17px; font-weight: 800; color: var(--navy); }
+    .card h2 { font-size: clamp(16px, 2.2vw, 22px); font-weight: 800; color: var(--navy); }
+
+    .card-arrow {
+      padding: 0 20px;
+      font-size: 24px;
+      color: #c0cce0;
+      flex-shrink: 0;
+      font-weight: 300;
+    }
 
     /* ── Notice ── */
     .notice-section {
@@ -181,17 +192,16 @@
       padding: 0 24px clamp(14px, 2vh, 24px);
       flex: 0 0 auto;
     }
-    .notice {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--navy);
-      border-radius: 10px;
-      padding: 16px 20px;
-      display: flex; align-items: flex-start; gap: 12px;
-    }
-    .notice-ico { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
-    .notice h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-    .notice p  { font-size: 13px; color: var(--sub); line-height: 1.7; }
+    .notice-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .notice-section-title { font-size: 15px; font-weight: 900; color: var(--navy); white-space: nowrap; letter-spacing: -.3px; }
+    .notice-section-line { flex: 1; height: 2px; background: var(--navy); }
+    .notice-grid { background: #fff; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .notice-row { display: flex; align-items: center; gap: 10px; padding: 6px 16px; }
+    .notice-row:first-child { padding-top: 11px; }
+    .notice-row:last-child { padding-bottom: 11px; }
+    .notice-badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 5px; flex-shrink: 0; white-space: nowrap; background: #eef1f8; color: var(--navy); }
+    .notice-text { font-size: 13px; color: var(--sub); flex: 1; line-height: 1.5; }
+    .notice-text strong { color: var(--navy); font-weight: 700; }
 
     /* ── Announce Admin ── */
     .announce-header { display: flex; align-items: center; }
@@ -312,7 +322,7 @@
   <section class="cards-section">
 
     <!-- 학습동아리 -->
-    <a href="https://djto-sp.github.io/djto-studygroup/" class="card">
+    <a href="https://djto-sp.github.io/djto-studygroup/" class="card ci-green">
       <div class="card-img-wrap ci-green">
         <img src="images/char-study.png" alt="학습동아리">
       </div>
@@ -320,10 +330,11 @@
         <div class="card-sub cs-green">조직 현안 관련 과제 발굴</div>
         <h2>학습동아리</h2>
       </div>
+      <div class="card-arrow">›</div>
     </a>
 
     <!-- 변화관리마일리지 -->
-    <a href="https://djto-sp.github.io/djto-mileage2026/" class="card">
+    <a href="https://djto-sp.github.io/djto-mileage2026/" class="card ci-orange">
       <div class="card-img-wrap ci-orange">
         <img src="images/char-mileage.png" alt="변화관리마일리지">
       </div>
@@ -331,10 +342,11 @@
         <div class="card-sub cs-orange">개인 역량 개발 및 능동적 조직문화 형성</div>
         <h2>변화관리마일리지</h2>
       </div>
+      <div class="card-arrow">›</div>
     </a>
 
     <!-- 혁신드림제안 -->
-    <a href="https://djto-sp.github.io/djto-dreamproposal/" class="card">
+    <a href="https://djto-sp.github.io/djto-dreamproposal/" class="card ci-blue">
       <div class="card-img-wrap ci-blue">
         <img src="images/char-proposal.png" alt="혁신드림제안">
       </div>
@@ -342,17 +354,24 @@
         <div class="card-sub cs-blue">현장 중심 아이디어 발굴</div>
         <h2>혁신드림제안제도</h2>
       </div>
+      <div class="card-arrow">›</div>
     </a>
 
   </section>
 
   <!-- Notice -->
   <div class="notice-section">
-    <div class="notice">
-      <div class="notice-ico">📌</div>
-      <div>
-        <h3>이용 안내</h3>
-        <p>모든 서비스는 <strong>PC 브라우저에서만</strong> 이용 가능합니다. 자료 업로드 및 관리 기능 이용 시 사번 확인이 필요할 수 있습니다.<br>문의 : 전략기획팀 이지민 주임 📞1148</p>
+    <div class="notice-section-header">
+      <div class="notice-section-title">이용 안내</div>
+      <div class="notice-section-line"></div>
+    </div>
+    <div class="notice-grid">
+      <div class="notice-row">
+        <span class="notice-text">모든 서비스는 <strong>PC 브라우저 사용을 권장합니다.</strong> 자료 업로드 및 관리 기능 이용 시 사번 확인이 필요할 수 있습니다.</span>
+      </div>
+      <div class="notice-row">
+        <span class="notice-badge">문의</span>
+        <span class="notice-text">전략기획팀 이지민 주임 📞1148</span>
       </div>
     </div>
   </div>
@@ -391,16 +410,14 @@ function renderAnnList() {
   }
   const colors = ['ann-card-0', 'ann-card-1', 'ann-card-2'];
   el.innerHTML = annData.slice(0, 3).map((n, i) => `
-    <div class="ann-card ${colors[i]}">
-      <div class="ann-card-top">
-        <div class="ann-card-title" onclick="openAnnDetail(${i})">${esc(n.title)}</div>
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-          ${n.driveUrl ? `<a class="ann-icon-btn" href="${n.driveUrl}" target="_blank" title="첨부파일 열기" style="text-decoration:none;font-size:13px;">📎</a>` : ''}
-          ${isAdmin ? `<button class="ann-icon-btn" onclick="annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
-          <span class="ann-card-date">${fmtD(n.createdAt)}</span>
-        </div>
+    <div class="ann-card ${colors[i]}" onclick="openAnnDetail(${i})">
+      <span class="ann-badge">공지</span>
+      <span class="ann-card-title">${esc(n.title)}</span>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+        ${n.driveUrl ? `<a class="ann-icon-btn" href="${n.driveUrl}" target="_blank" title="첨부파일 열기" style="text-decoration:none;font-size:13px;" onclick="event.stopPropagation()">📎</a>` : ''}
+        ${isAdmin ? `<button class="ann-icon-btn" onclick="event.stopPropagation();annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
+        <span class="ann-card-date">${fmtD(n.createdAt)}</span>
       </div>
-      ${n.content ? `<div class="ann-card-preview" onclick="openAnnDetail(${i})">${esc(n.content)}</div>` : ''}
     </div>`).join('');
 }
 
