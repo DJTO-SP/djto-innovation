@@ -349,7 +349,7 @@
       <div class="notice-ico">📌</div>
       <div>
         <h3>이용 안내</h3>
-        <p>모든 서비스는 PC·모바일 브라우저에서 이용 가능합니다. 자료 업로드 및 관리 기능 이용 시 사번 확인이 필요할 수 있습니다.<br>문의 : 전략기획팀 이지민 주임 📞1148</p>
+        <p>모든 서비스는 <strong>PC 브라우저에서만</strong> 이용 가능합니다. 자료 업로드 및 관리 기능 이용 시 사번 확인이 필요할 수 있습니다.<br>문의 : 전략기획팀 이지민 주임 📞1148</p>
       </div>
     </div>
   </div>
@@ -362,11 +362,21 @@ let annAdminPw = '';
 let annFileObj = null;
 
 (async () => {
+  // 캐시 즉시 표시
+  try {
+    const cached = localStorage.getItem('portalNotices');
+    if (cached) { annData = JSON.parse(cached); renderAnnList(); }
+  } catch(e) {}
+  // GAS에서 최신 데이터 갱신
   try {
     const r = await fetch(STUDY_SCRIPT + '?action=getPortalNotices');
-    annData = await r.json() || [];
-  } catch(e) { annData = []; }
-  renderAnnList();
+    const fresh = await r.json();
+    if (Array.isArray(fresh)) {
+      annData = fresh;
+      try { localStorage.setItem('portalNotices', JSON.stringify(fresh)); } catch(e) {}
+      renderAnnList();
+    }
+  } catch(e) { if (!annData.length) { annData = []; renderAnnList(); } }
 })();
 
 function renderAnnList() {
