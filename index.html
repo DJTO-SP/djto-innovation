@@ -222,7 +222,7 @@
     /* Notice input modal */
     .ann-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9998; display: none; align-items: center; justify-content: center; }
     .ann-modal-overlay.show { display: flex; }
-    .ann-modal { background: #fff; border-radius: 16px; padding: 26px 22px; width: 90%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    .ann-modal { background: #fff; border-radius: 16px; padding: 26px 22px; width: 90%; max-width: 600px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
     /* Notice detail modal */
     .ann-detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9997; display: none; align-items: center; justify-content: center; }
     .ann-detail-overlay.show { display: flex; }
@@ -237,7 +237,7 @@
     .ann-fg label { display: block; font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
     .ann-fg input, .ann-fg textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 11px; font-size: 13px; font-family: inherit; outline: none; resize: vertical; box-sizing: border-box; }
     .ann-fg input:focus, .ann-fg textarea:focus { border-color: var(--navy); }
-    .ann-fg textarea { height: 72px; min-height: 72px; }
+    .ann-fg textarea { height: 180px; min-height: 120px; }
     .ann-file-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; font-size: 12px; color: var(--sub); transition: all .2s; }
     .ann-file-zone:hover { border-color: var(--navy); background: #f0f3f8; }
     .ann-file-picked { font-size: 12px; font-weight: 600; color: var(--navy2); margin-top: 4px; display: none; }
@@ -282,14 +282,14 @@
   <!-- 공지 등록 모달 -->
   <div class="ann-modal-overlay" id="ann-modal">
     <div class="ann-modal">
-      <h3>📢 공지사항 등록</h3>
+      <h3 id="ann-modal-title">📢 공지사항 등록</h3>
       <div class="ann-fg">
         <label>제목 *</label>
         <input type="text" id="ann-title" placeholder="공지 제목을 입력하세요">
       </div>
       <div class="ann-fg">
         <label>내용 *</label>
-        <textarea id="ann-content" placeholder="공지 내용을 입력하세요" style="height:72px;min-height:72px;"></textarea>
+        <textarea id="ann-content" placeholder="공지 내용을 입력하세요"></textarea>
       </div>
       <div class="ann-fg">
         <label>첨부파일 (선택)</label>
@@ -301,7 +301,7 @@
       </div>
       <div class="ann-mf">
         <button onclick="closeAnnModal()" style="background:#e2e8f0;color:#64748b;">취소</button>
-        <button onclick="saveAnnNotice()" style="background:var(--navy);color:#fff;">등록</button>
+        <button id="ann-modal-submit" onclick="saveAnnNotice()" style="background:var(--navy);color:#fff;">등록</button>
       </div>
     </div>
   </div>
@@ -381,6 +381,7 @@ const STUDY_SCRIPT = 'https://script.google.com/macros/s/AKfycbz09Zkvveie1252E4Z
 let annData = [];
 let annAdminPw = '';
 let annFileObj = null;
+let annEditId = null;
 
 (async () => {
   // 캐시 즉시 표시
@@ -414,7 +415,7 @@ function renderAnnList() {
       <span class="ann-card-title">${esc(n.title)}</span>
       <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
         ${n.driveUrl ? `<a class="ann-icon-btn" href="${n.driveUrl}" target="_blank" title="첨부파일 열기" style="text-decoration:none;font-size:13px;" onclick="event.stopPropagation()">📎</a>` : ''}
-        ${isAdmin ? `<button class="ann-icon-btn" onclick="event.stopPropagation();annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
+        ${isAdmin ? `<button class="ann-icon-btn" onclick="event.stopPropagation();openAnnEdit(${i})" title="수정">✏️</button><button class="ann-icon-btn" onclick="event.stopPropagation();annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
         <span class="ann-card-date">${fmtD(n.createdAt)}</span>
       </div>
     </div>`).join('');
@@ -469,12 +470,34 @@ async function annLogin() {
 }
 
 function openAnnModal() {
+  annEditId = null;
   document.getElementById('ann-title').value = '';
   document.getElementById('ann-content').value = '';
   document.getElementById('ann-file').value = '';
   annFileObj = null;
+  document.getElementById('ann-file-picked').style.display = 'none';
+  document.getElementById('ann-modal-title').textContent = '📢 공지사항 등록';
+  document.getElementById('ann-modal-submit').textContent = '등록';
+  document.getElementById('ann-modal').classList.add('show');
+}
+
+function openAnnEdit(i) {
+  const n = annData.slice(0, 3)[i];
+  if (!n) return;
+  annEditId = n.id;
+  document.getElementById('ann-title').value = n.title || '';
+  document.getElementById('ann-content').value = n.content || '';
+  document.getElementById('ann-file').value = '';
+  annFileObj = null;
   const picked = document.getElementById('ann-file-picked');
-  picked.style.display = 'none';
+  if (n.fileName) {
+    picked.textContent = '📎 ' + n.fileName + ' (기존 파일)';
+    picked.style.display = 'block';
+  } else {
+    picked.style.display = 'none';
+  }
+  document.getElementById('ann-modal-title').textContent = '✏️ 공지사항 수정';
+  document.getElementById('ann-modal-submit').textContent = '수정';
   document.getElementById('ann-modal').classList.add('show');
 }
 function closeAnnModal() { document.getElementById('ann-modal').classList.remove('show'); }
@@ -499,12 +522,15 @@ async function saveAnnNotice() {
       fileName = annFileObj.name;
       fileType = annFileObj.type;
     }
-    const body = { action: 'savePortalNotice', pw: annAdminPw, title, content };
+    const body = annEditId
+      ? { action: 'editPortalNotice', pw: annAdminPw, id: annEditId, title, content }
+      : { action: 'savePortalNotice', pw: annAdminPw, title, content };
     if (fileData) Object.assign(body, { fileData, fileName, fileType });
     const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify(body) });
     const res = await r.json();
     if (res.ok) {
-      annToast('등록되었습니다!', true);
+      annToast(annEditId ? '수정되었습니다!' : '등록되었습니다!', true);
+      annEditId = null;
       closeAnnModal();
       const r2 = await fetch(STUDY_SCRIPT + '?action=getPortalNotices');
       annData = await r2.json() || [];
