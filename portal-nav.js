@@ -92,14 +92,15 @@
     // 기존 콘텐츠가 네비 뒤에 가리지 않도록 body 상단 패딩 추가
     document.body.style.paddingTop = '46px';
 
-    // 사이트별 짧은 공지 — 꿈씨패밀리 말풍선
+    // 사이트별 짧은 공지 — 꿈씨패밀리 손그림 말풍선
     for (const s of SERVICES) {
       if (isActive(s.key) && SITE_NOTICES[s.key]) {
         const style2 = document.createElement('style');
         style2.textContent = `
-          .pn-bubble-wrap { position:relative; display:flex; align-items:center; }
-          .pn-bubble { position:relative; background:#204473; color:#fff; font-size:15px; font-weight:700; padding:10px 20px; border-radius:14px; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,.12); }
-          .pn-bubble::after { content:''; position:absolute; right:-8px; top:50%; transform:translateY(-50%); border:8px solid transparent; border-left-color:#204473; border-right:0; }
+          .pn-speech { position:absolute; right:calc(100% + 6px); top:50%; transform:translateY(-50%); z-index:10; }
+          .pn-speech-inner { position:relative; background:#fff; color:#204473; font-size:14px; font-weight:800; padding:8px 16px; border-radius:18px 18px 4px 18px; border:2.5px solid #204473; white-space:nowrap; box-shadow:2px 2px 0px #204473; letter-spacing:-0.3px; }
+          .pn-speech-tail { position:absolute; right:-12px; bottom:2px; width:18px; height:16px; overflow:hidden; }
+          .pn-speech-tail::before { content:''; position:absolute; left:0; top:0; width:16px; height:16px; background:#fff; border:2.5px solid #204473; border-radius:0 0 0 12px; transform:rotate(-20deg); box-shadow:2px 2px 0px #204473; }
         `;
         document.head.appendChild(style2);
         setTimeout(function() {
@@ -108,11 +109,12 @@
           const inner = titleBar.querySelector('[style*="justify-content:space-between"]') || titleBar;
           const img = inner.querySelector('img');
           if (img) {
-            const wrap = document.createElement('div');
-            wrap.className = 'pn-bubble-wrap';
-            wrap.innerHTML = '<div class="pn-bubble">📢 ' + SITE_NOTICES[s.key] + '</div>';
-            wrap.style.marginRight = '16px';
-            img.before(wrap);
+            img.style.position = 'relative';
+            const bubble = document.createElement('div');
+            bubble.className = 'pn-speech';
+            bubble.innerHTML = '<div class="pn-speech-inner">📢 ' + SITE_NOTICES[s.key] + '<div class="pn-speech-tail"></div></div>';
+            img.parentElement.style.position = 'relative';
+            img.parentElement.appendChild(bubble);
           }
         }, 100);
         break;
