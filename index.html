@@ -111,7 +111,7 @@
     .announce-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .announce-section-title { font-size: 15px; font-weight: 900; color: var(--navy); white-space: nowrap; letter-spacing: -.3px; }
     .announce-section-line { flex: 1; height: 2px; background: var(--navy); }
-    .announce-grid { background: rgba(255,255,255,0.5); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; min-height: 44px; }
+    .announce-grid { background: rgba(255,255,255,0.5); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; min-height: 44px; max-height: 280px; overflow-y: auto; transition: max-height 0.3s ease; }
     .ann-card { display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-bottom: 1px solid var(--border); transition: background .12s; cursor: pointer; }
     .ann-card:last-child { border-bottom: none; }
     .ann-card:hover { background: #f5f8ff; }
@@ -184,7 +184,7 @@
     .cs-blue   { color: var(--navy2); }
     .cs-orange { color: var(--orange); }
     .cs-green  { color: var(--green); }
-    .card h2 { font-family: 'Cafe24PROSlimMax', 'Noto Sans KR', sans-serif; font-size: clamp(16px, 2.2vw, 22px); font-weight: normal; color: var(--navy); }
+    .card h2 { font-family: 'Cafe24PROSlimMax', 'Noto Sans KR', sans-serif; font-size: clamp(20px, 2.8vw, 28px); font-weight: normal; color: var(--navy); letter-spacing: 2px; }
 
     .card-arrow {
       padding: 0 20px;
@@ -390,6 +390,7 @@ let annData = [];
 let annAdminPw = '';
 let annFileObj = null;
 let annEditId = null;
+let annExpanded = false;
 
 (async () => {
   // 캐시 즉시 표시
@@ -417,8 +418,9 @@ function renderAnnList() {
     return;
   }
   const colors = ['ann-card-0', 'ann-card-1', 'ann-card-2'];
-  el.innerHTML = annData.slice(0, 3).map((n, i) => `
-    <div class="ann-card ${colors[i]}" onclick="openAnnDetail(${i})">
+  const showList = annExpanded ? annData : annData.slice(0, 3);
+  el.innerHTML = showList.map((n, i) => `
+    <div class="ann-card ${colors[i % 3]}" onclick="openAnnDetail(${i})">
       <span class="ann-badge">공지</span>
       <span class="ann-card-title">${esc(n.title)}</span>
       <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
@@ -426,11 +428,20 @@ function renderAnnList() {
         ${isAdmin ? `<button class="ann-icon-btn" onclick="event.stopPropagation();openAnnEdit(${i})" title="수정">✏️</button><button class="ann-icon-btn" onclick="event.stopPropagation();annDeleteNotice('${esc(n.id)}')" title="삭제">🗑️</button>` : ''}
         <span class="ann-card-date">${fmtD(n.createdAt)}</span>
       </div>
-    </div>`).join('');
+    </div>`).join('')
+    + (annData.length > 3 ? `<div style="text-align:center;padding:6px 0;border-top:1px solid var(--border)">
+        <button onclick="toggleAnnExpand()" style="background:none;border:none;color:var(--navy2);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;padding:4px 12px">${annExpanded ? '접기 ▲' : '더보기 ▼ (' + (annData.length - 3) + '건)'}</button>
+      </div>` : '');
+}
+
+function toggleAnnExpand() {
+  annExpanded = !annExpanded;
+  renderAnnList();
 }
 
 function openAnnDetail(i) {
-  const n = annData.slice(0, 3)[i];
+  const showList = annExpanded ? annData : annData.slice(0, 3);
+  const n = showList[i];
   if (!n) return;
   document.getElementById('ann-detail-title').textContent = n.title;
   document.getElementById('ann-detail-date').textContent = fmtD(n.createdAt);
@@ -490,7 +501,8 @@ function openAnnModal() {
 }
 
 function openAnnEdit(i) {
-  const n = annData.slice(0, 3)[i];
+  const showList = annExpanded ? annData : annData.slice(0, 3);
+  const n = showList[i];
   if (!n) return;
   annEditId = n.id;
   document.getElementById('ann-title').value = n.title || '';
