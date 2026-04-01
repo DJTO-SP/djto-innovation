@@ -92,24 +92,27 @@
     // 기존 콘텐츠가 네비 뒤에 가리지 않도록 body 상단 패딩 추가
     document.body.style.paddingTop = '46px';
 
-    // 사이트별 짧은 공지 배지 삽입
+    // 사이트별 짧은 공지 — 꿈씨패밀리 말풍선
     for (const s of SERVICES) {
       if (isActive(s.key) && SITE_NOTICES[s.key]) {
-        const badge = document.createElement('div');
-        badge.id = 'djto-site-notice';
-        badge.innerHTML = '📢 ' + SITE_NOTICES[s.key];
-        badge.style.cssText = 'display:inline-block;background:#fff3e0;color:#e8610a;font-size:13px;font-weight:700;padding:6px 16px;border-radius:20px;border:1.5px solid #fed7aa;white-space:nowrap;animation:pnBlink 2s ease-in-out infinite;';
         const style2 = document.createElement('style');
-        style2.textContent = '@keyframes pnBlink { 0%,100%{opacity:1;} 50%{opacity:0.6;} }';
+        style2.textContent = `
+          .pn-bubble-wrap { position:relative; display:flex; align-items:center; }
+          .pn-bubble { position:relative; background:#204473; color:#fff; font-size:15px; font-weight:700; padding:10px 20px; border-radius:14px; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,.12); }
+          .pn-bubble::after { content:''; position:absolute; right:-8px; top:50%; transform:translateY(-50%); border:8px solid transparent; border-left-color:#204473; border-right:0; }
+        `;
         document.head.appendChild(style2);
-        // 타이틀바 찾아서 삽입
         setTimeout(function() {
           const titleBar = document.querySelector('.title-bar .title-inner, .title-bar, [style*="border-bottom:2px solid"]');
-          if (titleBar) {
-            const inner = titleBar.querySelector('[style*="justify-content:space-between"]') || titleBar;
-            const img = inner.querySelector('img');
-            if (img) { img.before(badge); badge.style.marginRight = '12px'; }
-            else inner.appendChild(badge);
+          if (!titleBar) return;
+          const inner = titleBar.querySelector('[style*="justify-content:space-between"]') || titleBar;
+          const img = inner.querySelector('img');
+          if (img) {
+            const wrap = document.createElement('div');
+            wrap.className = 'pn-bubble-wrap';
+            wrap.innerHTML = '<div class="pn-bubble">📢 ' + SITE_NOTICES[s.key] + '</div>';
+            wrap.style.marginRight = '16px';
+            img.before(wrap);
           }
         }, 100);
         break;
