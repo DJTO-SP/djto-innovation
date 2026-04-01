@@ -14,7 +14,7 @@
   const SITE_NOTICES = {
     // studygroup: '6/30까지 모집 중',
     // mileage2026: '수시 신청 가능',
-    dreamproposal: '상반기 제안 접수 중',
+    dreamproposal: '(테스트)',
   };
 
   const path = window.location.href;
@@ -99,7 +99,9 @@
         style2.textContent = `
           .pn-img-wrap { position:relative; display:inline-block; }
           .pn-speech { position:absolute; right:calc(100% + 10px); top:50%; transform:translateY(-50%); z-index:10; }
-          .pn-speech-inner { background:#fff; color:#204473; font-size:14px; font-weight:800; padding:9px 18px; border-radius:20px; border:2.5px solid #204473; white-space:nowrap; }
+          .pn-speech-inner { position:relative; background:#fff; color:#204473; font-size:14px; font-weight:800; padding:9px 18px; border-radius:20px; border:2.5px solid #204473; white-space:nowrap; }
+          .pn-speech-inner::before { content:''; position:absolute; right:-18px; top:50%; margin-top:-7px; border:8px solid transparent; border-left:10px solid #204473; }
+          .pn-speech-inner::after { content:''; position:absolute; right:-14px; top:50%; margin-top:-6px; border:7px solid transparent; border-left:9px solid #fff; }
         `;
         document.head.appendChild(style2);
         setTimeout(function() {
