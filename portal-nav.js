@@ -10,6 +10,13 @@
     { label: '혁신드림제안',  url: 'https://djto-sp.github.io/djto-dreamproposal/', key: 'dreamproposal', color: '#2d5499' },
   ];
 
+  // ── 사이트별 공지 문구 (수정 후 push하면 반영) ──
+  const SITE_NOTICES = {
+    // studygroup: '6/30까지 모집 중',
+    // mileage2026: '수시 신청 가능',
+    dreamproposal: '상반기 제안 접수 중',
+  };
+
   const path = window.location.href;
   const isActive = (key) => path.includes(key);
 
@@ -84,6 +91,30 @@
 
     // 기존 콘텐츠가 네비 뒤에 가리지 않도록 body 상단 패딩 추가
     document.body.style.paddingTop = '46px';
+
+    // 사이트별 짧은 공지 배지 삽입
+    for (const s of SERVICES) {
+      if (isActive(s.key) && SITE_NOTICES[s.key]) {
+        const badge = document.createElement('div');
+        badge.id = 'djto-site-notice';
+        badge.innerHTML = '📢 ' + SITE_NOTICES[s.key];
+        badge.style.cssText = 'display:inline-block;background:#fff3e0;color:#e8610a;font-size:13px;font-weight:700;padding:6px 16px;border-radius:20px;border:1.5px solid #fed7aa;white-space:nowrap;animation:pnBlink 2s ease-in-out infinite;';
+        const style2 = document.createElement('style');
+        style2.textContent = '@keyframes pnBlink { 0%,100%{opacity:1;} 50%{opacity:0.6;} }';
+        document.head.appendChild(style2);
+        // 타이틀바 찾아서 삽입
+        setTimeout(function() {
+          const titleBar = document.querySelector('.title-bar .title-inner, .title-bar, [style*="border-bottom:2px solid"]');
+          if (titleBar) {
+            const inner = titleBar.querySelector('[style*="justify-content:space-between"]') || titleBar;
+            const img = inner.querySelector('img');
+            if (img) { img.before(badge); badge.style.marginRight = '12px'; }
+            else inner.appendChild(badge);
+          }
+        }, 100);
+        break;
+      }
+    }
   }
 
   if (document.readyState === 'loading') {
