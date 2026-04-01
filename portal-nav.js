@@ -132,18 +132,42 @@
 
   function loadPopups() {
     const siteKey = currentSiteKey();
-    fetch(POPUP_API + '?action=getPopups')
-      .then(function(r) { return r.json(); })
-      .then(function(popups) {
-        if (!Array.isArray(popups)) return;
-        popups.forEach(function(p) {
-          const sites = (p.sites || 'all').split(',').map(function(s) { return s.trim(); });
-          if (sites.indexOf('all') >= 0 || sites.indexOf(siteKey) >= 0) {
-            showPopup(p);
+    const CACHE_KEY = 'djto_popup_cache';
+    const CACHE_TS_KEY = 'djto_popup_cache_ts';
+
+    function displayPopups(popups) {
+      if (!Array.isArray(popups)) return;
+      popups.forEach(function(p) {
+        const sites = (p.sites || 'all').split(',').map(function(s) { return s.trim(); });
+        if (sites.indexOf('all') >= 0 || sites.indexOf(siteKey) >= 0) {
+          showPopup(p);
+        }
+      });
+    }
+
+    // 캐시에서 즉시 표시
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) displayPopups(JSON.parse(cached));
+    } catch(e) {}
+
+    // 5분마다 서버에서 갱신
+    var lastTs = parseInt(localStorage.getItem(CACHE_TS_KEY) || '0');
+    if (Date.now() - lastTs > 5 * 60 * 1000) {
+      fetch(POPUP_API + '?action=getPopups')
+        .then(function(r) { return r.json(); })
+        .then(function(popups) {
+          if (Array.isArray(popups)) {
+            try {
+              localStorage.setItem(CACHE_KEY, JSON.stringify(popups));
+              localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+            } catch(e) {}
+            // 캐시가 없었으면 표시
+            if (!localStorage.getItem(CACHE_KEY + '_shown')) displayPopups(popups);
           }
-        });
-      })
-      .catch(function() {});
+        })
+        .catch(function() {});
+    }
   }
 
   if (document.readyState === 'loading') {
