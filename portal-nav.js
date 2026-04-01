@@ -97,10 +97,11 @@
       if (isActive(s.key) && SITE_NOTICES[s.key]) {
         const style2 = document.createElement('style');
         style2.textContent = `
-          .pn-speech { position:absolute; right:calc(100% + 6px); top:50%; transform:translateY(-50%); z-index:10; }
+          .pn-img-wrap { position:relative; display:inline-block; }
+          .pn-speech { position:absolute; right:calc(100% + 10px); top:50%; transform:translateY(-50%); z-index:10; }
           .pn-speech-inner { position:relative; background:#fff; color:#204473; font-size:14px; font-weight:800; padding:8px 16px; border-radius:18px 18px 4px 18px; border:2.5px solid #204473; white-space:nowrap; box-shadow:2px 2px 0px #204473; letter-spacing:-0.3px; }
-          .pn-speech-tail { position:absolute; right:-12px; bottom:2px; width:18px; height:16px; overflow:hidden; }
-          .pn-speech-tail::before { content:''; position:absolute; left:0; top:0; width:16px; height:16px; background:#fff; border:2.5px solid #204473; border-radius:0 0 0 12px; transform:rotate(-20deg); box-shadow:2px 2px 0px #204473; }
+          .pn-speech-tail { position:absolute; right:-10px; top:50%; transform:translateY(-50%); width:0; height:0; border-top:6px solid transparent; border-bottom:6px solid transparent; border-left:10px solid #204473; }
+          .pn-speech-tail::after { content:''; position:absolute; right:3px; top:-5px; width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:8px solid #fff; }
         `;
         document.head.appendChild(style2);
         setTimeout(function() {
@@ -109,12 +110,15 @@
           const inner = titleBar.querySelector('[style*="justify-content:space-between"]') || titleBar;
           const img = inner.querySelector('img');
           if (img) {
-            img.style.position = 'relative';
+            // img를 감싸는 wrapper 생성
+            const wrap = document.createElement('div');
+            wrap.className = 'pn-img-wrap';
+            img.parentElement.insertBefore(wrap, img);
+            wrap.appendChild(img);
             const bubble = document.createElement('div');
             bubble.className = 'pn-speech';
             bubble.innerHTML = '<div class="pn-speech-inner">📢 ' + SITE_NOTICES[s.key] + '<div class="pn-speech-tail"></div></div>';
-            img.parentElement.style.position = 'relative';
-            img.parentElement.appendChild(bubble);
+            wrap.appendChild(bubble);
           }
         }, 100);
         break;
