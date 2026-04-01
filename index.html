@@ -283,10 +283,7 @@
     <!-- 관리자 도구 바 -->
     <div class="ann-admin-bar" id="ann-admin-bar">
       <span>👑 관리자 모드</span>
-      <div style="display:flex;gap:6px;">
-        <button class="ann-add-btn" onclick="openAnnModal()">+ 공지 등록</button>
-        <button class="ann-add-btn" onclick="openPopupManager()" style="background:var(--orange);">🔔 팝업 관리</button>
-      </div>
+      <button class="ann-add-btn" onclick="openAnnModal()">+ 공지 등록</button>
     </div>
   </div>
 
@@ -318,33 +315,6 @@
   </div>
   <div id="ann-toast"></div>
 
-  <!-- 팝업 관리 모달 -->
-  <div class="ann-modal-overlay" id="popup-manager-overlay" onclick="if(event.target===this)closePopupManager()">
-    <div class="ann-modal" style="max-width:640px;">
-      <h3>🔔 팝업 관리</h3>
-      <div id="popup-list" style="margin-bottom:16px;"></div>
-      <div style="border-top:1px solid var(--border);padding-top:16px;">
-        <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;" id="popup-form-title">새 팝업 등록</div>
-        <input type="hidden" id="popup-edit-id">
-        <div class="ann-fg"><label>제목 *</label><input type="text" id="popup-title" placeholder="팝업 제목"></div>
-        <div class="ann-fg"><label>내용 *</label><textarea id="popup-content" placeholder="팝업 내용" style="height:100px;"></textarea></div>
-        <div class="ann-fg">
-          <label>표시 사이트</label>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-            <label style="font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pop-site-all" onchange="popSiteAll(this)" checked> 전체</label>
-            <label style="font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pop-site-portal" class="pop-site"> 포털</label>
-            <label style="font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pop-site-studygroup" class="pop-site"> 학습동아리</label>
-            <label style="font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pop-site-mileage2026" class="pop-site"> 마일리지</label>
-            <label style="font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" id="pop-site-dreamproposal" class="pop-site"> 드림제안</label>
-          </div>
-        </div>
-        <div class="ann-mf">
-          <button onclick="closePopupManager()" style="background:#e2e8f0;color:#64748b;">닫기</button>
-          <button onclick="savePopup()" style="background:var(--navy);color:#fff;">저장</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Notice Detail Modal -->
   <div class="ann-detail-overlay" id="ann-detail-overlay" onclick="if(event.target===this)closeAnnDetail()">
@@ -620,88 +590,6 @@ function annToB64(file) {
     reader.onerror = rej;
     reader.readAsDataURL(file);
   });
-}
-
-// ── 팝업 관리 ──
-function openPopupManager() {
-  document.getElementById('popup-manager-overlay').classList.add('show');
-  loadPopupList();
-  resetPopupForm();
-}
-function closePopupManager() { document.getElementById('popup-manager-overlay').classList.remove('show'); }
-
-async function loadPopupList() {
-  const el = document.getElementById('popup-list');
-  try {
-    const r = await fetch(STUDY_SCRIPT + '?action=getPopups');
-    const popups = await r.json();
-    if (!Array.isArray(popups) || !popups.length) { el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px 0;">등록된 팝업이 없습니다.</div>'; return; }
-    el.innerHTML = popups.map(p => {
-      const sites = (p.sites||'all').split(',').map(s=>s.trim());
-      const siteLabels = sites.indexOf('all')>=0 ? '전체' : sites.map(s=>({portal:'포털',studygroup:'학습동아리',mileage2026:'마일리지',dreamproposal:'드림제안'}[s]||s)).join(', ');
-      return `<div style="border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-        <div><div style="font-size:14px;font-weight:700;color:var(--navy);">${esc(p.title)}</div><div style="font-size:12px;color:var(--sub);">${siteLabels} · ${fmtD(p.createdAt)}</div></div>
-        <div style="display:flex;gap:4px;">
-          <button onclick="editPopup('${esc(p.id)}','${esc(p.title)}',\`${esc(p.content)}\`,'${esc(p.sites||'all')}')" style="background:none;border:none;cursor:pointer;font-size:14px;">✏️</button>
-          <button onclick="deletePopup('${esc(p.id)}')" style="background:none;border:none;cursor:pointer;font-size:14px;">🗑️</button>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) { el.innerHTML = '<div style="color:var(--sub);font-size:13px;">로드 실패</div>'; }
-}
-
-function resetPopupForm() {
-  document.getElementById('popup-edit-id').value = '';
-  document.getElementById('popup-title').value = '';
-  document.getElementById('popup-content').value = '';
-  document.getElementById('pop-site-all').checked = true;
-  document.querySelectorAll('.pop-site').forEach(c => c.checked = false);
-  document.getElementById('popup-form-title').textContent = '새 팝업 등록';
-}
-
-function editPopup(id, title, content, sites) {
-  document.getElementById('popup-edit-id').value = id;
-  document.getElementById('popup-title').value = title;
-  document.getElementById('popup-content').value = content;
-  document.getElementById('popup-form-title').textContent = '팝업 수정';
-  const siteList = sites.split(',').map(s=>s.trim());
-  document.getElementById('pop-site-all').checked = siteList.indexOf('all') >= 0;
-  document.querySelectorAll('.pop-site').forEach(c => { c.checked = siteList.indexOf(c.id.replace('pop-site-','')) >= 0; });
-}
-
-function popSiteAll(el) {
-  if (el.checked) document.querySelectorAll('.pop-site').forEach(c => c.checked = false);
-}
-
-async function savePopup() {
-  const title = document.getElementById('popup-title').value.trim();
-  const content = document.getElementById('popup-content').value.trim();
-  if (!title || !content) { annToast('제목과 내용을 입력해주세요.'); return; }
-  let sites = 'all';
-  if (!document.getElementById('pop-site-all').checked) {
-    const sel = [];
-    document.querySelectorAll('.pop-site').forEach(c => { if (c.checked) sel.push(c.id.replace('pop-site-','')); });
-    sites = sel.length ? sel.join(',') : 'all';
-  }
-  const id = document.getElementById('popup-edit-id').value;
-  try {
-    const body = { action: 'savePopup', pw: annAdminPw, title, content, sites };
-    if (id) body.id = id;
-    const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify(body) });
-    const res = await r.json();
-    if (res.ok) { annToast(id ? '수정되었습니다!' : '팝업이 등록되었습니다!', true); loadPopupList(); resetPopupForm(); }
-    else annToast(res.error || '오류');
-  } catch(e) { annToast('오류가 발생했습니다.'); }
-}
-
-async function deletePopup(id) {
-  if (!confirm('이 팝업을 삭제하시겠습니까?')) return;
-  try {
-    const r = await fetch(STUDY_SCRIPT, { method: 'POST', body: JSON.stringify({ action: 'deletePopup', pw: annAdminPw, id }) });
-    const res = await r.json();
-    if (res.ok) { annToast('삭제되었습니다.', true); loadPopupList(); }
-    else annToast(res.error || '오류');
-  } catch(e) { annToast('오류가 발생했습니다.'); }
 }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
