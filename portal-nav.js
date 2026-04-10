@@ -14,7 +14,7 @@
   const SITE_NOTICES = {
     // studygroup: '6/30까지 모집 중',
     // mileage2026: '수시 신청 가능',
-    dreamproposal: '(테스트)',
+    // dreamproposal: 관리자 패널에서 관리 (script.js → loadAndShowNotice)
   };
 
   const path = window.location.href;
